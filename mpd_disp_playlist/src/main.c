@@ -60,13 +60,13 @@ int main(int argc, char **argv) {
 		printf("Nothing to do, exiting.\n");
 		return 0;
 	}
-	
+
 	MpdObj *mpd = mpd_new("localhost", 6600, NULL);
 	if(mpd_connect(mpd)) {
 		printf("Failed to connect to MPD\n");
 		return 1;
 	}
-	
+
 	switch(task) {
 		case LIST_PLAYLISTS: {
 			MpdData *playlists = mpd_database_playlist_list(mpd);
@@ -81,17 +81,12 @@ int main(int argc, char **argv) {
 				print_song(songs->song, NULL);
 			}
 			} break;
-		
+
 		default:
 			printf("Nothing to do, exiting\n");
 			break;
-		
+
 	}
-		//MpdData *songs = mpd_database_get_playlist_content(mpd, playlists->playlist->path);
-		//for(songs = mpd_data_get_first(songs); songs != NULL; songs = mpd_data_get_next(songs)) {
-		//	printf("  %s - %s\n", songs->song->artist, songs->song->title);
-		//}
-	//}
 
 	mpd_disconnect(mpd);
 	mpd_free(mpd);
@@ -119,7 +114,7 @@ void help_msg() {
 
 void print_song(mpd_Song *song, char *prepend) {
 	if(prepend != NULL) printf(prepend);
-	
+
 	// TODO: insert printing based on `song_fmt`!
 
 	/*

@@ -128,7 +128,7 @@ int main(int argc, char **argv) {
 }
 
 void help_msg() {
-	printf("USAGE: disp_playlist [options] -P playlist -S source_dir -T target_dir\n");
+	printf("USAGE: copy_pl_files [options] -P playlist -S source_dir -T target_dir\n");
 	printf("    -h             Display this help message\n"
 	       "    -v             Display the version\n"
 		   "    -P playlist    Playlist to use\n"
