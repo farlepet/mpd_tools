@@ -17,3 +17,6 @@ Copy all the songs in a playlist to a directory, if they do not already exist. T
 
 ### mpd_create_m3u8
 Create a m3u8 playlist from a MPD playlist with a specified music base directory. Useful when used in conjunction with `mpd_copy_pl_files`.
+
+### mpd_create_csv
+Create a CSV file from an MPD playlist in the format `title,artist,album,` This format is intended to be used with gmusic-playlist (https://github.com/soulfx/gmusic-playlist) or similar.

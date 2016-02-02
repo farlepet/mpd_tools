@@ -15,6 +15,8 @@ char *playlist   = NULL;
 
 void help_msg();
 
+char *rep_char(char *, char, char);
+
 int main(int argc, char **argv) {
 	int argn = 1;
 	for(; argn < argc; argn++) {
@@ -58,18 +60,26 @@ int main(int argc, char **argv) {
 
 	for(songs = mpd_data_get_first(songs); songs != NULL; songs = mpd_data_get_next(songs)) {
 		mpd_Song *song = songs->song;
-		if(song->title) printf("%s,", song->title);
+		if(song->title) printf("%s,", rep_char(song->title, ',', ' '));
 		else printf(",");
 
-		if(song->artist) printf("%s,", song->artist);
+		if(song->artist) printf("%s,", rep_char(song->artist, ',', ' '));
 		else printf(",");
 
-		if(song->album) printf("%s,\n", song->album);
+		if(song->album) printf("%s,\n", rep_char(song->album, ',', ' '));
 		else printf(",\n");
 	}
 
 	mpd_disconnect(mpd);
 	mpd_free(mpd);
+}
+
+char *rep_char(char *str, char ch, char rep) {
+	unsigned int i;
+	for(i = 0; i < strlen(str); i++) {
+		if(str[i] == ch) str[i] = rep;
+	}
+	return str;
 }
 
 void help_msg() {
