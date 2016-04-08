@@ -19,6 +19,8 @@ enum {
 
 char *playlist = NULL;
 
+int more_info = 0;
+
 void help_msg();
 void print_song(mpd_Song *, char *);
 
@@ -34,6 +36,8 @@ int main(int argc, char **argv) {
 			return 0;
 		} else if(!strcmp(arg, "-l")) {
 			task = LIST_PLAYLISTS;
+		} else if(!strcmp(arg, "-m")) {
+			more_info = 1;
 		} else if(!strcmp(arg, "-f")) {
 			if(argn == (argc - 1)) {
 				printf("You must specify a format string!\n");
@@ -72,6 +76,27 @@ int main(int argc, char **argv) {
 			MpdData *playlists = mpd_database_playlist_list(mpd);
 			for(playlists = mpd_data_get_first(playlists); playlists != NULL; playlists = mpd_data_get_next(playlists)) {
 				printf("%s\n", playlists->playlist->path);
+				if(more_info == 1) {
+					long time = 0, nsongs = 0;
+					MpdData *songs = mpd_database_get_playlist_content(mpd, playlists->playlist->path);
+					for(songs = mpd_data_get_first(songs); songs != NULL; songs = mpd_data_get_next(songs)) {
+						if(songs->song->time != MPD_SONG_NO_TIME) time += songs->song->time;
+						nsongs++;
+						// TODO: gather more information
+					}
+
+					printf("    # of songs: %ld\n", nsongs);
+					int hours = time / 3600;
+					int minutes = (time / 60) % 60;
+					int seconds = time % 60;
+					if(hours > 24) {
+						int days = time / 86400;
+						hours = (time / 3600) % 24;
+						printf("    Run time: %d day(s), %02d:%02d:%02d\n", days, hours, minutes, seconds);
+					} else {
+						printf("    Run time: %02d:%02d:%02d\n", hours, minutes, seconds);
+					}
+				}
 			}
 			} break;
 
@@ -97,6 +122,7 @@ void help_msg() {
 	printf("    -h             Display this help message\n"
 	       "    -v             Display the version\n"
 	       "    -l             List playlists\n"
+		   "    -m             Display more info about each playlist (with -l)\n"
 		   "    -L [Playlist]  List all songs in the specified playlist\n"
 		   "    -f [Format]    Format to use when printing song names (see below)\n"
 		   "\n"
