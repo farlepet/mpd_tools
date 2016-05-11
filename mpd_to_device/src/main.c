@@ -124,7 +124,7 @@ int main(int argc, char **argv) {
 		printf("Failed to connect to MPD\n");
 		return 1;
 	}
-	printf("Connected to MPD\n");
+	printf("Connected to MPD\n\n");
 
 	
 
@@ -134,9 +134,10 @@ int main(int argc, char **argv) {
 	int idx = 0;
 	// Copy songs first:
 	for(; idx < n_playlists; idx++) {
+		printf("Copying songs for %s\n", playlists[idx]);
 		MpdData *songs = mpd_database_get_playlist_content(mpd, playlists[idx]);
 		if(songs == NULL) {
-			printf("Could not retrieve songs from playlist \"%s\"\n", playlists[idx]);
+			printf("  Could not retrieve songs from playlist!\n");
 		}
 		
 		for(songs = mpd_data_get_first(songs); songs != NULL; songs = mpd_data_get_next(songs)) {
@@ -146,17 +147,17 @@ int main(int argc, char **argv) {
 			target_file[target_dir_strlen] = '/';
 			strcpy(target_file + (target_dir_strlen + 1), song->file);
 			if(!file_exists(target_file)) {
-				printf("Copying song to %s\n", target_file);
+				printf("  Copying song to %s\n", target_file);
 
 				char *source_file = (char *)malloc(source_dir_strlen + strlen(song->file) + 2);
 				strcpy(source_file, source_dir);
 				source_file[source_dir_strlen] = '/';
 				strcpy(source_file + (source_dir_strlen + 1), song->file);
 				if(!file_exists(source_file)) {
-					printf("  -> ERROR: Source file does not exist: \"%s\"\n", source_file);
+					printf("    -> ERROR: Source file does not exist: \"%s\"\n", source_file);
 				}
 				else {
-					printf("  -> From \"%s\"\n", source_file);
+					printf("    -> From \"%s\"\n", source_file);
 
 					char *dir = dirname(target_file);
 					char *cmd = malloc(strlen("mkdir -p \"\" ") + strlen(dir) + 1);
@@ -174,12 +175,13 @@ int main(int argc, char **argv) {
 			free(target_file);
 		}
 	}
-	
+	printf("\n");
 	// Then create playlist files:
 	for(idx = 0; idx < n_playlists; idx++) {
+		printf("Creating m3u8 for %s\n", playlists[idx]);
 		MpdData *songs = mpd_database_get_playlist_content(mpd, playlists[idx]);
 		if(songs == NULL) {
-			printf("Could not retrieve songs from playlist \"%s\"\n", playlists[idx]);
+			printf("  Could not retrieve songs from playlist!\n");
 		}
 		
 		char *pl_fname = (char *)malloc(strlen(playlist_dir) + strlen(playlists[idx]) + 6);
@@ -193,14 +195,14 @@ int main(int argc, char **argv) {
 		
 			fclose(pl_file);
 		} else {
-			printf("Could not open file for writing: %s\n", pl_fname);
+			printf("  Could not open file for writing: %s\n", pl_fname);
 		}
 		free(pl_fname);
 	}
 
 	mpd_disconnect(mpd);
 	mpd_free(mpd);
-	printf("Disconnected from MPD\n");
+	printf("\nDisconnected from MPD\n");
 }
 
 void help_msg() {
@@ -211,7 +213,7 @@ void help_msg() {
 			"    -T target_dir   Directory in which to place the music\n"
 			"    -S source_dir   Directory containing the music in the MPD playlist\n"
 			"    -d playlist_dir Directory in which to create playlists (defaults to `target_dir`)\n"
-			"    -D music_dir    Devices relative music directory\n"
+			"    -D34 music_dir    Devices relative music directory\n"
 			);
 }
 
