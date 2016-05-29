@@ -184,7 +184,7 @@ int main(int argc, char **argv) {
 			printf("  Could not retrieve songs from playlist!\n");
 		}
 		
-		char *pl_fname = (char *)malloc(strlen(playlist_dir) + strlen(playlists[idx]) + 6);
+		char *pl_fname = (char *)malloc(strlen(playlist_dir) + strlen(playlists[idx]) + 8);
 		sprintf(pl_fname, "%s/%s.m3u8", playlist_dir, playlists[idx]);
 		FILE *pl_file = fopen(pl_fname, "w");
 		if(pl_file != NULL) {

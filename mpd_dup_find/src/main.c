@@ -61,10 +61,9 @@ int main(int argc, char **argv) {
 
 	long *hashes	  = (long *)malloc(pl_len * sizeof(long));
 	mpd_Song **ssongs = (mpd_Song **)malloc(pl_len * sizeof(mpd_Song *));
-	int *del_idxs     = (int *)malloc((pl_len / 2) * sizeof(int));
+	int *del_idxs     = (int *)malloc((pl_len / 2) * sizeof(int));			// Maximum number of deletions is equal to half of the length of the playlist
 	int del_idx = 0; del_idxs[0] = -1;
 
-	//MpdData *songs = mpd_playlist_get_song_from_pos_range(mpd, 0, pl_len - 1);
 	int idx;
 	for(songs = mpd_data_get_first(songs), idx = 0; songs != NULL; songs = mpd_data_get_next(songs), idx++)
 	{
@@ -81,17 +80,24 @@ int main(int argc, char **argv) {
 				if(dup2 == NULL) continue;
 
 				printf("\e[33mHashes match of indexes: \e[32m%d \e[33m& \e[32m%d\e[0m\n", idx, i);
-				printf("\e[33mPossible duplicate:\e[0m\n");
-				printf("  \e[33mSong1: \e[32m%s \e[33m- \e[32m%s\e[0m\n", dup1->artist, dup1->title);
-				printf("  \e[33mSong2: \e[32m%s \e[33m- \e[32m%s\e[0m\n", dup2->artist, dup2->title);
-
-				printf("remove Song2? (y/n):");
-				if(get_yesno()) {
-					del_idxs[del_idx] = idx;
-					del_idx++;
-					del_idxs[del_idx] = -1;
+				
+				if(!(strcmp(dup1->artist, dup2->artist) | strcmp(dup1->title, dup2->title))) {
+					printf("\e[33mPossible duplicate, titles and artists match:\e[0m\n");
+					printf("  \e[33mSong1: \e[32m%s \e[33m- \e[32m%s\e[33m from \e[32m%s\e[0m\n", dup1->artist, dup1->title, dup1->album);
+					printf("  \e[33mSong2: \e[32m%s \e[33m- \e[32m%s\e[33m from \e[32m%s\e[0m\n", dup2->artist, dup2->title, dup1->album);
+					
+					printf("remove Song2? (y/n):");
+					if(get_yesno()) {
+						del_idxs[del_idx] = idx;
+						del_idx++;
+						del_idxs[del_idx] = -1;
+					}
+					printf("\n");
+				} else {
+					printf("\e[33mEntries are not an exact match\e[0m\n");
 				}
-				printf("\n");
+				
+				
 				break;
 			}
 		}
@@ -117,11 +123,15 @@ int main(int argc, char **argv) {
 long quickhash(char *str1, char *str2) {
 	long hash = 0;
 	unsigned int i;
-	for(i = 0; i < strlen(str1); i++) {
-		hash += (int)str1[i];
+	if(str1) {
+		for(i = 0; i < strlen(str1); i++) {
+			hash += (int)str1[i];
+		}
 	}
-	for(i = 0; i < strlen(str2); i++) {
-		hash *= (str2[i] - 30);
+	if(str2) {
+		for(i = 0; i < strlen(str2); i++) {
+			hash *= (str2[i] - 30);
+		}
 	}
 	return hash;
 }
