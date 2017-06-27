@@ -80,8 +80,9 @@ int main(int argc, char **argv) {
 				if(dup2 == NULL) continue;
 
 				printf("\e[33mHashes match of indexes: \e[32m%d \e[33m& \e[32m%d\e[0m\n", idx, i);
-				
-				if(!(strcmp(dup1->artist, dup2->artist) | strcmp(dup1->title, dup2->title))) {
+			
+				if(!(((dup1->artist && dup2->artist) && strcmp(dup1->artist, dup2->artist))
+                            || ((dup1->title && dup2->title) && strcmp(dup1->title, dup2->title)))) {
 					printf("\e[33mPossible duplicate, titles and artists match:\e[0m\n");
 					printf("  \e[33mSong1: \e[32m%s \e[33m- \e[32m%s\e[33m from \e[32m%s\e[0m\n", dup1->artist, dup1->title, dup1->album);
 					printf("  \e[33mSong2: \e[32m%s \e[33m- \e[32m%s\e[33m from \e[32m%s\e[0m\n", dup2->artist, dup2->title, dup1->album);
