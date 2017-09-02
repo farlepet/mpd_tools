@@ -148,5 +148,5 @@ void help_msg() {
 	printf("USAGE: mpd_dup_find [options] -P playlist\n"
 		   "	-h          Display this help message\n"
 		   "	-P playlist Playlist in which to check for duplicates\n"
-		   );
+	);
 }

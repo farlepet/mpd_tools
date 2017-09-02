@@ -213,8 +213,8 @@ void help_msg() {
 			"    -T target_dir   Directory in which to place the music\n"
 			"    -S source_dir   Directory containing the music in the MPD playlist\n"
 			"    -d playlist_dir Directory in which to create playlists (defaults to `target_dir`)\n"
-			"    -D34 music_dir    Devices relative music directory\n"
-			);
+			"    -D music_dir    Device's relative music directory\n"
+	);
 }
 
 int file_exists(char *filename) {

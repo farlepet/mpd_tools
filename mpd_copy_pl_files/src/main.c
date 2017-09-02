@@ -132,9 +132,9 @@ void help_msg() {
 	printf("    -h             Display this help message\n"
 	       "    -v             Display the version\n"
 		   "    -P playlist    Playlist to use\n"
-			 "    -T target_dir  Directory in which to place the music\n"
-			 "    -S source_dir  Directory containing the music in the MPD playlist\n"
-		   );
+		   "    -T target_dir  Directory in which to place the music\n"
+		   "    -S source_dir  Directory containing the music in the MPD playlist\n"
+	);
 }
 
 int file_exists(char *filename) {

@@ -87,8 +87,8 @@ void help_msg() {
 	printf("    -h             Display this help message\n"
 	       "    -v             Display the version\n"
 		   "    -P playlist    Playlist to use\n"
-			 "\n"
-			 "OUTPUT:\n"
-			 "  title,artist,album,\n"
-		   );
+		   "\n"
+		   "OUTPUT:\n"
+		   "  title,artist,album,\n"
+	);
 }

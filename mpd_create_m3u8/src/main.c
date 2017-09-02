@@ -84,9 +84,9 @@ void help_msg() {
 	printf("    -h             Display this help message\n"
 	       "    -v             Display the version\n"
 		   "    -P playlist    Playlist to use\n"
-			 "    -D target_dir  Music directory\n"
-			 "\n"
-			 "OUTPUT:\n"
-			 "  [dir]/song_file\n"
-		   );
+		   "    -D target_dir  Music directory\n"
+		   "\n"
+		   "OUTPUT:\n"
+		   "  [dir]/song_file\n"
+	);
 }

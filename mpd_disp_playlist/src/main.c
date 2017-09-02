@@ -135,32 +135,11 @@ void help_msg() {
 		   "    %%D Disc         %%p Performer\n"
 		   "    %%C Comment      %%L Length\n"
 		   "    %%P Position     %%i ID\n"
-		   );
+	);
 }
 
 void print_song(mpd_Song *song, char *prepend) {
 	if(prepend != NULL) printf(prepend);
-
-	// TODO: insert printing based on `song_fmt`!
-
-	/*
-	char *	file
-	char *	artist
-	char *	title
-	char *	album
-	char *	track
-	char *	name
-	char *	date
-	char *	genre
-	char *	composer
-	char *	performer
-	char *	disc
-	char *	comment
-	char *	albumartist
-	int		time
-	int		pos
-	int		id
-	*/
 
 	unsigned int i = 0;
 	while(song_fmt[i] != 0) {
