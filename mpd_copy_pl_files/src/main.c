@@ -20,6 +20,7 @@ static int  read_args(int, char **);
 static void help_msg();
 static int  file_exists(char *);
 static void replace_special_chars(char *);
+static int copy_file(char *, char *);
 
 int main(int argc, char **argv) {
 	int ret = read_args(argc, argv);
@@ -66,19 +67,8 @@ int main(int argc, char **argv) {
 				printf("  -> ERROR: Source file does not exist: \"%s\"\n", source_file);
 			}
 			else {
-				printf("  -> From \"%s\"\n", source_file);
-
-				char *dir = dirname(target_file);
-				char *cmd = malloc(strlen("mkdir -p \"\" ") + strlen(dir) + 1);
-				sprintf(cmd, "mkdir -p \"%s\"", dir);
-				system(cmd);
-				free(cmd);
-
-				cmd = (char *)malloc(strlen(source_file) + strlen(target_file) + strlen("/bin/cp \"\" \"\"") + 1);
-				sprintf(cmd, "/bin/cp \"%s\" \"%s\"", source_file, target_file);
-			  system(cmd);
-				free(cmd);
-			}
+			    copy_file(source_file, target_file);
+            }
 			free(source_file);
 		}
 		free(target_file);
@@ -181,5 +171,46 @@ static void replace_special_chars(char *filename) {
         }
         filename++;
     }
+}
+
+static int copy_file(char *src, char *dest) {
+    printf("  -> From \"%s\"\n", src);
+
+    /* Create Directory:*/
+	char *dir = dirname(dest);
+	char *cmd = malloc(strlen("mkdir -p \"\" ") + strlen(dir) + 1);
+	sprintf(cmd, "mkdir -p \"%s\"", dir);
+	system(cmd);
+	free(cmd);
+
+    int cnt = strlen("/bin/cp \"\" \"\"");
+    for(size_t i = 0; i < strlen(src); i++) {
+        cnt += (src[i] == '"') ? 2 : 1;
+    }
+    for(size_t i = 0; i < strlen(dest); i++) {
+        cnt += (dest[i] == '"') ? 2 : 1;
+    }
+
+    size_t idx = 0;
+	cmd = (char *)malloc(cnt + 1);
+    idx += sprintf(cmd, "/bin/cp \"");
+    while(*src) {
+        if(*src == '"' || *src == '$') cmd[idx++] = '\\';
+        cmd[idx++] = *src;
+        src++;
+    }
+    idx += sprintf(&cmd[idx], "\" \"");
+    while(*dest) {
+        if(*dest == '"' || *dest == '$') cmd[idx++] = '\\';
+        cmd[idx++] = *dest;
+        dest++;
+    }
+    idx += sprintf(&cmd[idx], "\"");
+    
+    
+    system(cmd);
+	free(cmd);
+
+    return 0;
 }
 
